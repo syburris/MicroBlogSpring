@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome To The Iron Blog</title>
+</head>
+<body>
+WINNING!!
+<form action="/add-message" method="post">
+    <input type="text" placeholder="type ya message brah" name="newMessage"/>
+    <button type="submit">Submit Brah</button>
+</form>
+
+<table>
+    <tr>
+        <th>#</th>
+        <th>Message</th>
+        <th>Submitted by...</th>
+    </tr>
+    {{#messages}}
+    <tr>
+        <td>{{id}}</td>
+        <td>{{text}}</td>
+        <td>{{userId}}</td>
+    </tr>
+    {{/messages}}
+</table>
+
+</body>
+</html>
