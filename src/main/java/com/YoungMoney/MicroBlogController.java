@@ -20,4 +20,11 @@ public class MicroBlogController {
         model.addAttribute("messages", messageList);
         return "index";
     }
+
+    @RequestMapping(path = "add-message", method = RequestMethod.POST)
+    public String addMessage(String text) {
+        Message message = new Message(text);
+        messages.save(message);
+        return "redirect:/";
+    }
 }
