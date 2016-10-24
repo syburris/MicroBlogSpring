@@ -27,6 +27,10 @@ public class MicroBlogController {
         User user = users.findByUsername(name);
 
         Iterable<Message> messageList = messages.findAll();
+
+        for (Message m : messageList) {
+            m.isMe = m.user.username.equals(name);
+        }
         model.addAttribute("messages", messageList);
         model.addAttribute("user", user);
         return "index";
@@ -51,23 +55,65 @@ public class MicroBlogController {
         return "redirect:/";
     }
 
-    @RequestMapping(path = "add-message", method = RequestMethod.POST)
+    @RequestMapping(path = "/add-message", method = RequestMethod.POST)
     public String addMessage(HttpSession session, String text) throws Exception {
         String name = (String) session.getAttribute("username");
         User user = users.findByUsername(name);
         if(user == null) {
             throw new Exception("you're not logged in!");
         }
-        Message message = new Message(text);
+        Message message = new Message(text, user);
         messages.save(message);
         return "redirect:/";
     }
 
-    @RequestMapping(path = "delete-message", method = RequestMethod.POST)
-    public String deleteMessage(int id) {
-//        int message2delete =
-//        int delete = messages.findOne(id);
+    @RequestMapping(path = "/delete-message", method = RequestMethod.POST)
+    public String deleteMessage(int id, HttpSession session) throws Exception {
+        String name = (String) session.getAttribute("username");
+        User user = users.findByUsername(name);
+        Message m = messages.findOne(id);
+        if (user == null) {
+            throw new Exception("You're not logged in!");
+        }
+        else if (!user.username.equals(m.user.username)) {
+            throw new Exception("Not yours to delete.");
+        }
+        messages.delete(m);
+        return "redirect:/";
+    }
 
+    @RequestMapping(path = "/edit-message", method = RequestMethod.GET)
+    public String getEdit(Model model, HttpSession session, int id) throws Exception {
+        String name = (String) session.getAttribute("username");
+        User user = users.findByUsername(name);
+        Message m = messages.findOne(id);
+        if (user == null) {
+            throw new Exception("you're not logged in.");
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("message", m);
+        return "edit";
+    }
+
+    @RequestMapping(path = "/edit-message", method = RequestMethod.POST)
+    public String edit(HttpSession session, String text, Integer id) throws Exception{
+        String name = (String) session.getAttribute("username");
+        User user = users.findByUsername(name);
+        Message m = messages.findOne(id);
+        if(user==null) {
+            throw new Exception("Not logged in!");
+        }
+        else if(!user.username.equals(m.user.username)) {
+            throw new Exception("Not yours to edit.");
+        }
+        m.setText(text);
+        messages.save(m);
+        return "redirect:/";
+    }
+
+    @RequestMapping(path = "logout", method = RequestMethod.POST)
+    public String logout(HttpSession session) {
+        session.invalidate();
         return "redirect:/";
     }
 }

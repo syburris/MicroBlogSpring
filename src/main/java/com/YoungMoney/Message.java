@@ -16,20 +16,24 @@ public class Message {
     @Column(nullable = false)
     String text;
 
-    @Column(nullable = false)
-    int userId;
+    @ManyToOne
+    User user;
+
+    @Transient
+    boolean isMe;
 
     public Message() {
     }
 
-    public Message(String text) {
+    public Message(String text, User user) {
         this.text = text;
+        this.user = user;
     }
 
-    public Message(int id, String text, int userId) {
+    public Message(int id, String text, User user) {
         this.id = id;
         this.text = text;
-        this.userId = userId;
+        this.user = user;
     }
 
     public int getId() {
@@ -48,11 +52,4 @@ public class Message {
         this.text = text;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 }

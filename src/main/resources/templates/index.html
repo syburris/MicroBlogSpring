@@ -20,12 +20,30 @@
         <th>#</th>
         <th>Message</th>
         <th>Submitted by...</th>
+        <th></th>
+        <th></th>
     </tr>
     {{#messages}}
     <tr>
         <td>{{id}}</td>
         <td>{{text}}</td>
-        <td>{{userId}}</td>
+        <td>{{#user}}{{username}}{{/user}}</td>
+        <td>
+            {{#isMe}}
+            <form action="/edit-message" method="get">
+                <input type="hidden" value="{{id}}" name="id"/>
+                <button type="submit">Edit</button>
+            </form>
+            {{/isMe}}
+        </td>
+        <td>
+            {{#isMe}}
+            <form action="/delete-message" method="post">
+                <input type="hidden" value="{{id}}" name="id"/>
+                <button type="submit">Delete</button>
+            </form>
+            {{/isMe}}
+        </td>
     </tr>
     {{/messages}}
 </table>
