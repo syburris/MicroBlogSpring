@@ -34,4 +34,12 @@ public class MicroBlogController {
         messages.save(message);
         return "redirect:/";
     }
+
+    @RequestMapping(path = "delete-message", method = RequestMethod.POST)
+    public String deleteMessage(int id) {
+//        int message2delete =
+//        int delete = messages.findOne(id);
+
+        return "redirect:/";
+    }
 }
