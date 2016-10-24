@@ -13,10 +13,10 @@ public class Message {
     @GeneratedValue
     int id;
 
-    @Column
+    @Column(nullable = false)
     String text;
 
-    @Column
+    @Column(nullable = false)
     int userId;
 
     public Message() {
