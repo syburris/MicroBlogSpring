@@ -5,7 +5,12 @@
     <title>Welcome To The Iron Blog</title>
 </head>
 <body>
-
+{{^user}}
+<form action="/login" method="get">
+    <button type="submit">log in</button>
+</form>
+{{/user}}
+{{#user}}
 <form action="/add-message" method="post">
     <input type="text" placeholder="type ya message brah" name="text"/>
     <button type="submit">Submit Brah</button>
@@ -24,6 +29,6 @@
     </tr>
     {{/messages}}
 </table>
-
+{{/user}}
 </body>
 </html>

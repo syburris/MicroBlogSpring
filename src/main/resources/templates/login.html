@@ -6,13 +6,13 @@
 </head>
 
 <body>
-{{^username}}
+{{^user}}
 
 <form action="/login" method="post">
-    <input type="text" placeholder="tagname brah" username="username"/>
-    <input type="password" placeholder="#password#" username="password"/>
+    <input type="text" placeholder="tagname brah" name="username"/>
+    <input type="password" placeholder="#password#" name="password"/>
     <button type="submit">enter</button>
 </form>
-{{/username}}
+{{/user}}
 </body>
 </html>

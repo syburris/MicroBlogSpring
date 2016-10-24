@@ -22,14 +22,42 @@ public class MicroBlogController {
     UserRepo users;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
+        String name = (String) session.getAttribute("username");
+        User user = users.findByUsername(name);
+
         Iterable<Message> messageList = messages.findAll();
         model.addAttribute("messages", messageList);
+        model.addAttribute("user", user);
         return "index";
     }
 
+    @RequestMapping(path = "/login", method = RequestMethod.GET)
+    public String getLogin() throws Exception {
+        return "login";
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public String login(String username, String password, HttpSession session) throws Exception {
+        User user = users.findByUsername(username);
+        if (user == null) {
+            user = new User(username,password);
+            users.save(user);
+        }
+        else if(!password.equals(user.password)) {
+            throw new Exception("Wrong password!");
+        }
+        session.setAttribute("username",username);
+        return "redirect:/";
+    }
+
     @RequestMapping(path = "add-message", method = RequestMethod.POST)
-    public String addMessage(String text) {
+    public String addMessage(HttpSession session, String text) throws Exception {
+        String name = (String) session.getAttribute("username");
+        User user = users.findByUsername(name);
+        if(user == null) {
+            throw new Exception("you're not logged in!");
+        }
         Message message = new Message(text);
         messages.save(message);
         return "redirect:/";
